@@ -29,6 +29,19 @@ class ViewController: UIViewController {
     func setDefaultTitle() {
         title = "Multibrowser"
     }
+    
+    func updateUI(for webView: WKWebView) {
+        title = webView.title
+        addressBar.text = webView.url?.absoluteString ?? ""
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if traitCollection.horizontalSizeClass == .compact {
+            stackView.axis = .vertical
+        } else {
+            stackView.axis = .horizontal
+        }
+    }
 
 }
 
@@ -85,6 +98,14 @@ extension ViewController: WKNavigationDelegate {
         
         activeWebView = webView
         webView.layer.borderWidth = 3
+        
+        updateUI(for: webView)
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if webView == activeWebView {
+            updateUI(for: webView)
+        }
     }
 }
 
