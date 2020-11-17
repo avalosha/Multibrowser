@@ -113,7 +113,10 @@ extension ViewController: UITextFieldDelegate {
     
     //Se activara cuando el usuario de Enter
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let webView = activeWebView, let address = addressBar.text {
+        if let webView = activeWebView, var address = addressBar.text {
+            if !address.hasPrefix("https://") || !address.hasPrefix("http://") {
+                address = "https://\(address)"
+            }
             if let url = URL(string: address) {
                 webView.load(URLRequest(url: url))
             }
@@ -122,6 +125,15 @@ extension ViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+//    func verifyUrl (urlString: String?) -> Bool {
+//       if let urlString = urlString {
+//           if let url = NSURL(string: urlString) {
+//               return UIApplication.shared.canOpenURL(url as URL)
+//           }
+//       }
+//       return false
+//   }
 }
 
 extension ViewController: UIGestureRecognizerDelegate {
